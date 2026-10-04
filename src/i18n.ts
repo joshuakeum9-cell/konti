@@ -99,7 +99,7 @@ const en: typeof ko = {
   title: 'Set title',
   gap: 'Black screen between songs',
   verses: 'Verses',
-  verse: (n: number) => `v${n}`,
+  verse: (n: number) => `Verse ${n}`,
   pickSlides: 'Pick slides',
   done: 'Done',
   remove: 'Remove',

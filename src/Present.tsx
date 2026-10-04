@@ -149,13 +149,6 @@ export function Present({ konti, startItem, onExit }: { konti: Konti; startItem:
     else next()
   }
 
-  const songSteps = step ? seq.filter((s) => s.item === step.item && s.kind === 'slide') : []
-  const posInSong = step?.kind === 'slide' ? songSteps.indexOf(step) + 1 : 0
-  const curSong = step?.kind === 'slide' ? step.song : null
-  const curVerses = curSong ? verses(curSong) : []
-  const curSkip = new Set(konti.items[curItem]?.skip ?? [])
-  const activeVerse = curSong && step?.kind === 'slide' ? curVerses.findIndex((v) => step.n >= v.start && step.n <= v.end) : -1
-
   return (
     <div
       class={'present' + (ui ? '' : ' idle')}
@@ -181,47 +174,12 @@ export function Present({ konti, startItem, onExit }: { konti: Konti; startItem:
         {!step && ui && <div class="end-note">{t.end}</div>}
       </div>
 
-      <div class="bar" onClick={(e) => e.stopPropagation()} onMouseMove={poke}>
-        <div class="bar-songs">
-          {itemOrder.map((i, n) => {
-            const s = getSong(konti.items[i].id)!
-            return (
-              <button class={'chip' + (i === curItem ? ' on' : '')} onClick={() => go(songStart(i))} title={s.title}>
-                <b>{n + 1}</b> {s.title}
-              </button>
-            )
-          })}
-        </div>
-        <div class="bar-row">
-          <div class="bar-verses">
-            {curVerses.map((v, i) => {
-              let included = false
-              for (let n = v.start; n <= v.end; n++) if (!curSkip.has(n)) included = true
-              if (!included) return null
-              return (
-                <button class={'vbtn' + (i === activeVerse ? ' on' : '')} onClick={() => toVerse(i + 1)} title={v.label}>
-                  {curSong!.kind === 'hymn' || !v.label ? t.verse(i + 1) : v.label}
-                </button>
-              )
-            })}
-          </div>
-          <div class="bar-tools">
-            {curSong && <span class="count">{t.slideOf(posInSong, songSteps.length)}</span>}
-            <button class={'tool' + (black ? ' on' : '')} onClick={() => setBlack((b) => !b)}>
-              {t.black}
-            </button>
-            <button class="tool" onClick={() => (isFullscreen() ? document.exitFullscreen() : enterFullscreen())}>
-              {t.fullscreen}
-            </button>
-            <button class="tool" onClick={() => setHelp((h) => !h)} aria-label={t.keys}>
-              ?
-            </button>
-            <button class="tool exit" onClick={onExit}>
-              {t.exit}
-            </button>
-          </div>
-        </div>
-      </div>
+      {/* no on-screen controls while presenting; a hidden corner button ends it on touch screens */}
+      <button class="corner-exit" onClick={onExit} aria-label={t.exit} title={t.exit}>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M6 6l12 12M18 6 6 18" />
+        </svg>
+      </button>
 
       {help && (
         <div class="help" onClick={() => setHelp(false)}>

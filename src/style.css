@@ -778,78 +778,21 @@ svg {
   font-size: 15px;
 }
 
-.bar {
+.corner-exit {
   position: absolute;
-  left: 0;
+  top: 0;
   right: 0;
-  bottom: 0;
-  padding: 28px 16px calc(12px + env(safe-area-inset-bottom));
-  background: linear-gradient(transparent, rgb(0 0 0 / 82%) 40%);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  transition: opacity 0.25s ease;
-}
-.present.idle .bar {
-  opacity: 0;
-  pointer-events: none;
-}
-.bar-songs {
-  display: flex;
-  gap: 6px;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-.bar-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-.bar-verses,
-.bar-tools {
-  display: flex;
-  gap: 6px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-.chip,
-.vbtn,
-.tool {
-  padding: 6px 12px;
-  border-radius: 8px;
-  background: rgb(255 255 255 / 12%);
+  width: 64px;
+  height: 64px;
+  display: grid;
+  place-items: center;
   color: #fff;
-  font-size: 13px;
-  white-space: nowrap;
-  max-width: 260px;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  opacity: 0;
+  transition: opacity 0.2s ease;
 }
-.chip:hover,
-.vbtn:hover,
-.tool:hover {
-  background: rgb(255 255 255 / 22%);
-}
-.chip.on,
-.vbtn.on,
-.tool.on {
-  background: #fff;
-  color: #000;
-}
-.chip b {
+.corner-exit:hover,
+.corner-exit:focus-visible {
   opacity: 0.6;
-  margin-right: 2px;
-}
-.count {
-  font-size: 13px;
-  color: rgb(255 255 255 / 70%);
-  font-variant-numeric: tabular-nums;
-  margin-right: 4px;
-}
-.tool.exit {
-  background: rgb(255 255 255 / 20%);
 }
 
 .help {
