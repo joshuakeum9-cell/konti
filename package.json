@@ -1,0 +1,22 @@
+{
+  "name": "konti",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Worship set list (콘티) builder and full-screen presenter for the church's song slides",
+  "type": "module",
+  "scripts": {
+    "slides": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/export_slides.ps1",
+    "data": "python tools/plan_ids.py && python tools/build_data.py",
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "preact": "^10.29.8"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.10.6",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.1"
+  }
+}

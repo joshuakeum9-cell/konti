@@ -1,0 +1,11 @@
+{
+  "name": "콘티",
+  "short_name": "콘티",
+  "description": "찬양 콘티를 만들고 전체 화면으로 발표합니다",
+  "lang": "ko",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f6f4ef",
+  "theme_color": "#f6f4ef",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}
