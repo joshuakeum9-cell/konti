@@ -23,6 +23,18 @@ REPEATS = {
     'p61': 2,  # 키코 아하브 (Hebrew and Korean)
 }
 
+# Verse starts checked by eye where the deck's own buttons are wrong or missing
+# (the buttons pointed at slides 1, 2, 3, 4 when each verse spans two slides).
+JUMP_FIXES = {
+    'h008': [1, 5, 9, 13],
+    'h011': [1, 3, 5],
+    'h014': [1, 3, 5, 7],
+    'h054': [1, 4],
+    'h056': [1, 3, 5, 7],
+    'h058': [1, 3, 5, 7],
+    'h060': [1, 3, 5],
+}
+
 # Praise decks whose file name needs more than the generic clean-up.
 TITLE_FIXES = {
     'p36': '성령 하나님 나를 만지소서',
@@ -98,6 +110,8 @@ def main():
         jumps = deck.get('jumps') or []
         if isinstance(jumps, dict):
             jumps = [jumps]
+        if sid in JUMP_FIXES:
+            jumps = [{'slide': n, 'label': ''} for n in JUMP_FIXES[sid]]
         webps = []
         for s in slides:
             n = f"{s['n']:02d}"
