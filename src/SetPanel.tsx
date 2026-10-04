@@ -179,15 +179,6 @@ function ItemRow(p: {
             <span class="muted"> {included < song.slides ? `${included}/${song.slides}` : t.slides(song.slides)}</span>
           </span>
           <span class="song-title">{song.title}</span>
-          {vs.length > 0 && (
-            <span class="verses">
-              {vs.map((v, i) => (
-                <button class={'vchip ' + verseState(v.start, v.end)} onClick={() => toggleVerse(v.start, v.end)} title={v.label}>
-                  {t.verse(i + 1)}
-                </button>
-              ))}
-            </span>
-          )}
         </div>
         <div class="item-actions">
           <button class="icon-btn" onClick={p.onPresent} title={t.presentFrom} aria-label={t.presentFrom}>
@@ -207,6 +198,15 @@ function ItemRow(p: {
           </button>
         </div>
       </div>
+      {vs.length > 0 && (
+        <div class="verses">
+          {vs.map((v, i) => (
+            <button class={'vchip ' + verseState(v.start, v.end)} onClick={() => toggleVerse(v.start, v.end)} title={v.label}>
+              {t.verse(i + 1)}
+            </button>
+          ))}
+        </div>
+      )}
       {p.open && (
         <div class="picker" style={{ '--ar': song.aspect } as any}>
           {Array.from({ length: song.slides }, (_, i) => i + 1).map((n) => (
