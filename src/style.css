@@ -536,7 +536,7 @@ svg {
   font-variant-numeric: tabular-nums;
 }
 .item-thumb .thumb {
-  width: 132px;
+  width: clamp(132px, 11vw, 210px);
 }
 .item-text {
   flex: 1;
