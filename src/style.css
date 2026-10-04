@@ -4,7 +4,7 @@
   --panel-2: #fbfaf7;
   --line: #e4e0d6;
   --text: #1d1f23;
-  --muted: #6c6a64;
+  --muted: #4f4d48;
   --accent: #23395b;
   --accent-ink: #ffffff;
   --accent-soft: #e6ebf3;
@@ -21,7 +21,7 @@
     --panel-2: #24262b;
     --line: #34363c;
     --text: #ecebe7;
-    --muted: #9b9a94;
+    --muted: #b4b3ad;
     --accent: #9db7e0;
     --accent-ink: #12161d;
     --accent-soft: #273141;
@@ -42,8 +42,8 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: Pretendard, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', system-ui, sans-serif;
-  font-size: 15px;
-  line-height: 1.4;
+  font-size: 16px;
+  line-height: 1.45;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -290,9 +290,9 @@ svg {
   flex: 1;
   min-height: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   grid-auto-rows: max-content;
-  gap: 8px;
+  gap: 12px;
   align-content: start;
 }
 
@@ -313,14 +313,14 @@ svg {
   min-width: 0;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 8px;
+  gap: 16px;
+  padding: 12px;
   text-align: left;
 }
 
 .thumb {
   flex: none;
-  width: 112px;
+  width: 150px;
   aspect-ratio: 16 / 9;
   border-radius: 6px;
   background: #0d0d0d;
@@ -341,12 +341,14 @@ svg {
   gap: 1px;
 }
 .song-no {
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 700;
   color: var(--accent);
 }
 .song-title {
-  font-weight: 600;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -354,7 +356,7 @@ svg {
   -webkit-box-orient: vertical;
 }
 .song-sub {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--muted);
   white-space: nowrap;
   overflow: hidden;
@@ -362,26 +364,56 @@ svg {
 }
 
 .add {
-  position: relative;
   align-self: stretch;
-  width: 52px;
+  width: 64px;
   display: grid;
   place-items: center;
   border-left: 1px solid var(--line);
   color: var(--accent);
 }
+.add svg {
+  width: 24px;
+  height: 24px;
+}
 .add:hover {
   background: var(--accent-soft);
 }
-.add.in {
-  background: var(--accent-soft);
+.add-col {
+  align-self: stretch;
+  width: 64px;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid var(--line);
 }
-.add .badge {
+.added {
+  position: relative;
+  flex: 1;
+  display: grid;
+  place-items: center;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.added svg {
+  width: 24px;
+  height: 24px;
+  stroke-width: 2.5;
+}
+.added .badge {
   position: absolute;
-  top: 6px;
+  top: 4px;
   right: 6px;
   font-size: 11px;
   font-weight: 700;
+}
+.remove {
+  padding: 6px 0;
+  border-top: 1px solid var(--line);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--danger);
+}
+.remove:hover {
+  background: color-mix(in srgb, var(--danger), transparent 90%);
 }
 
 .empty {
@@ -824,6 +856,12 @@ svg {
   margin: 0;
 }
 
+@media (min-width: 1400px) {
+  .songs {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 /* ---------- phones and narrow windows ---------- */
 
 @media (max-width: 860px) {
@@ -852,7 +890,7 @@ svg {
     grid-template-columns: minmax(0, 1fr);
   }
   .thumb {
-    width: 96px;
+    width: 112px;
   }
   .tabs {
     display: grid;

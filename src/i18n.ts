@@ -39,7 +39,7 @@ const ko = {
   verse: (n: number) => `${n}절`,
   pickSlides: '장면 고르기',
   done: '완료',
-  remove: '빼기',
+  remove: '삭제',
   up: '위로',
   down: '아래로',
   defaultTitle: (d: Date) => `${d.getMonth() + 1}월 ${d.getDate()}일 주일 예배`,

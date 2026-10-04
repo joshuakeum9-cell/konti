@@ -79,6 +79,14 @@ export function addSong(id: string) {
 export const removeItem = (key: string) =>
   updateCurrent((k) => ({ ...k, items: k.items.filter((i) => i.key !== key) }))
 
+/** Removes the last copy of a song from the set. */
+export function removeSong(id: string) {
+  updateCurrent((k) => {
+    const i = k.items.map((x) => x.id).lastIndexOf(id)
+    return i < 0 ? k : { ...k, items: k.items.filter((_, j) => j !== i) }
+  })
+}
+
 export function moveItem(from: number, to: number) {
   updateCurrent((k) => {
     const items = [...k.items]

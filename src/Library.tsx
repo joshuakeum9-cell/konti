@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks'
 import { search, thumbUrl, verses, type Filter, type Song } from './data'
 import { useT } from './i18n'
-import { addSong, useStore } from './store'
+import { addSong, removeSong, useStore } from './store'
 
 export function songLabel(s: Song, t: ReturnType<typeof useT>['t']) {
   return s.kind === 'hymn' ? t.hymnNo(s.num) : t.praiseNo(s.num)
@@ -84,24 +84,30 @@ export function Library({ onAdded }: { onAdded?: () => void }) {
                 <span class="song-text">
                   <span class="song-no">
                     {songLabel(s, t)}
-                    {s.tong ? <span class="muted"> ({t.tong(s.tong)})</span> : null}
                   </span>
                   <span class="song-title">{s.title}</span>
                   {sub && <span class="song-sub">{sub}</span>}
                 </span>
               </button>
-              <button class={'add' + (c ? ' in' : '')} onClick={() => add(s)} aria-label={t.add} title={c ? t.added(c) : t.add}>
-                {c ? (
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="m5 12.5 4.5 4.5L19 7.5" />
-                  </svg>
-                ) : (
+              {c ? (
+                <div class="add-col">
+                  <span class="added" title={t.added(c)} aria-label={t.added(c)}>
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="m5 12.5 4.5 4.5L19 7.5" />
+                    </svg>
+                    {c > 1 && <span class="badge">{c}</span>}
+                  </span>
+                  <button class="remove" onClick={() => removeSong(s.id)}>
+                    {t.remove}
+                  </button>
+                </div>
+              ) : (
+                <button class="add" onClick={() => add(s)} aria-label={t.add} title={t.add}>
                   <svg viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M12 5v14M5 12h14" />
                   </svg>
-                )}
-                {c > 1 && <span class="badge">{c}</span>}
-              </button>
+                </button>
+              )}
             </li>
           )
         })}
