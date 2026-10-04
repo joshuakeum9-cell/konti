@@ -2,7 +2,7 @@ import { useRef, useState } from 'preact/hooks'
 import { getSong, thumbUrl, verses, type Song } from './data'
 import { useT } from './i18n'
 import { Thumb, songLabel } from './Library'
-import { moveItem, removeItem, setGap, setSkip, setTitle, shareLink, useStore, type Item } from './store'
+import { MAX_REPEAT, moveItem, removeItem, setGap, setRepeat, setSkip, setTitle, shareLink, useStore, type Item } from './store'
 
 type Drag = { from: number; to: number; dy: number; h: number; mids: number[]; y0: number }
 
@@ -131,6 +131,7 @@ function ItemRow(p: {
   const vs = verses(song)
   const firstIncluded = Array.from({ length: song.slides }, (_, i) => i + 1).find((n) => !skip.has(n)) ?? 1
   const included = song.slides - item.skip.filter((n) => n <= song.slides).length
+  const rep = item.rep ?? song.repeat ?? 1
 
   const verseState = (start: number, end: number) => {
     let on = 0
@@ -176,7 +177,11 @@ function ItemRow(p: {
         <div class="item-text">
           <span class="song-no">
             {songLabel(song, t)}
-            <span class="muted"> {included < song.slides ? `${included}/${song.slides}` : t.slides(song.slides)}</span>
+            <span class="muted">
+              {' '}
+              {included < song.slides ? `${included}/${song.slides}` : t.slides(song.slides)}
+              {rep > 1 && ` × ${rep}`}
+            </span>
           </span>
           <span class="song-title">{song.title}</span>
         </div>
@@ -198,15 +203,23 @@ function ItemRow(p: {
           </button>
         </div>
       </div>
-      {vs.length > 0 && (
-        <div class="verses">
-          {vs.map((v, i) => (
-            <button class={'vchip ' + verseState(v.start, v.end)} onClick={() => toggleVerse(v.start, v.end)} title={v.label}>
-              {t.verse(i + 1)}
-            </button>
-          ))}
-        </div>
-      )}
+      <div class="verses">
+        {vs.map((v, i) => (
+          <button class={'vchip ' + verseState(v.start, v.end)} onClick={() => toggleVerse(v.start, v.end)} title={v.label}>
+            {t.verse(i + 1)}
+          </button>
+        ))}
+        <span class={'repeat' + (rep > 1 ? ' on' : '')} title={t.repeatHint}>
+          <span class="repeat-label">{t.repeat}</span>
+          <button onClick={() => setRepeat(item.key, rep - 1)} disabled={rep <= 1} aria-label={`${t.repeat} -`}>
+            −
+          </button>
+          <b>{t.times(rep)}</b>
+          <button onClick={() => setRepeat(item.key, rep + 1)} disabled={rep >= MAX_REPEAT} aria-label={`${t.repeat} +`}>
+            +
+          </button>
+        </span>
+      </div>
       {p.open && (
         <div class="picker" style={{ '--ar': song.aspect } as any}>
           {Array.from({ length: song.slides }, (_, i) => i + 1).map((n) => (

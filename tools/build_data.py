@@ -16,6 +16,13 @@ HYMNAL = os.path.join(os.path.dirname(ROOT), 'hymnal', 'data', 'hymns')
 
 FULL_Q, THUMB_W, THUMB_Q = 82, 480, 72
 
+# Decks that print several verses stacked under the same notes, so the whole
+# deck is sung that many times (the operator used to jump back by hand).
+REPEATS = {
+    'p59': 3,  # 호두 라도나이 키토프
+    'p61': 2,  # 키코 아하브 (Hebrew and Korean)
+}
+
 # Praise decks whose file name needs more than the generic clean-up.
 TITLE_FIXES = {
     'p36': '성령 하나님 나를 만지소서',
@@ -138,6 +145,8 @@ def main():
                 label = re.sub(r'^\d+\s*[.)]\s*', '', (j.get('label') or '').strip())
                 out.append({'slide': j['slide'], 'label': label})
             song['jumps'] = out
+        if sid in REPEATS:
+            song['repeat'] = REPEATS[sid]
         song['v'] = file_hash(webps)
         songs.append(song)
 

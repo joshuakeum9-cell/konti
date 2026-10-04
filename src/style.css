@@ -560,6 +560,7 @@ svg {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+  align-items: center;
   padding: 0 14px 12px 78px;
 }
 .vchip {
@@ -580,6 +581,45 @@ svg {
   background: var(--accent-soft);
   border-color: var(--accent);
   color: var(--accent);
+}
+.repeat {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+  padding: 0 2px 0 10px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.repeat.on {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.repeat-label {
+  font-weight: 600;
+  margin-right: 4px;
+}
+.repeat b {
+  min-width: 26px;
+  text-align: center;
+  color: var(--text);
+}
+.repeat.on b {
+  color: var(--accent);
+}
+.repeat button {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1;
+}
+.repeat button:hover:not(:disabled) {
+  background: var(--panel-2);
 }
 .vchip.off {
   color: var(--muted);

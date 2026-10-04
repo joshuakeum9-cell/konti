@@ -3,7 +3,7 @@ import { getSong, slideUrl, verses, type Song } from './data'
 import { useT } from './i18n'
 import type { Konti } from './store'
 
-type Step = { kind: 'slide'; item: number; song: Song; n: number } | { kind: 'gap'; item: number }
+type Step = { kind: 'slide'; item: number; song: Song; n: number; pass: number } | { kind: 'gap'; item: number }
 
 export function buildSequence(k: Konti): Step[] {
   const seq: Step[] = []
@@ -12,7 +12,9 @@ export function buildSequence(k: Konti): Step[] {
     if (!song) return
     const skip = new Set(it.skip)
     const slides: Step[] = []
-    for (let n = 1; n <= song.slides; n++) if (!skip.has(n)) slides.push({ kind: 'slide', item, song, n })
+    const passes = Math.max(1, it.rep ?? song.repeat ?? 1)
+    for (let pass = 1; pass <= passes; pass++)
+      for (let n = 1; n <= song.slides; n++) if (!skip.has(n)) slides.push({ kind: 'slide', item, song, n, pass })
     if (!slides.length) return
     if (k.gap && seq.length) seq.push({ kind: 'gap', item })
     seq.push(...slides)
@@ -74,8 +76,10 @@ export function Present({ konti, startItem, onExit }: { konti: Konti; startItem:
     if (!step || step.kind !== 'slide') return
     const vs = verses(step.song)
     const range = vs[v - 1]
-    if (!range) return
-    const i = seq.findIndex((s) => s.kind === 'slide' && s.item === step.item && s.n >= range.start && s.n <= range.end)
+    // a repeated song: number n means its n-th time through
+    const i = range
+      ? seq.findIndex((s) => s.kind === 'slide' && s.item === step.item && s.n >= range.start && s.n <= range.end)
+      : seq.findIndex((s) => s.kind === 'slide' && s.item === step.item && s.pass === v)
     if (i >= 0) go(i)
   }
 

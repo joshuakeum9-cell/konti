@@ -12,6 +12,7 @@ export type Song = {
   slides: number
   hidden?: number[] // slides hidden in the original deck
   jumps?: Jump[] // the deck's own verse buttons: where each verse starts
+  repeat?: number // verses stacked on the same slides: play the deck this many times
   v: string // content hash, busts the image cache when slides change
 }
 

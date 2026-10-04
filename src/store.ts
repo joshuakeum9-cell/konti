@@ -2,8 +2,13 @@ import { useEffect, useState } from 'preact/hooks'
 import { currentT } from './i18n'
 import { getSong } from './data'
 
-/** One song in a set. `skip` lists slide numbers left out (e.g. verses not sung). */
-export type Item = { key: string; id: string; skip: number[] }
+/**
+ * One song in a set. `skip` lists slide numbers left out (e.g. verses not sung);
+ * `rep` plays the song's slides that many times (decks with verses stacked on one slide).
+ */
+export type Item = { key: string; id: string; skip: number[]; rep?: number }
+
+export const MAX_REPEAT = 9
 
 export type Konti = {
   id: string
@@ -73,7 +78,7 @@ function updateCurrent(f: (k: Konti) => Konti) {
 
 export function addSong(id: string) {
   const song = getSong(id)
-  updateCurrent((k) => ({ ...k, items: [...k.items, { key: uid(), id, skip: [...(song?.hidden ?? [])] }] }))
+  updateCurrent((k) => ({ ...k, items: [...k.items, { key: uid(), id, skip: [...(song?.hidden ?? [])], rep: song?.repeat ?? 1 }] }))
 }
 
 export const removeItem = (key: string) =>
@@ -102,6 +107,12 @@ export const setSkip = (key: string, skip: number[]) =>
     items: k.items.map((i) => (i.key === key ? { ...i, skip: [...new Set(skip)].sort((a, b) => a - b) } : i)),
   }))
 
+export const setRepeat = (key: string, rep: number) =>
+  updateCurrent((k) => ({
+    ...k,
+    items: k.items.map((i) => (i.key === key ? { ...i, rep: Math.max(1, Math.min(MAX_REPEAT, rep)) } : i)),
+  }))
+
 export const setTitle = (title: string) => updateCurrent((k) => ({ ...k, title }))
 export const setGap = (gap: boolean) => updateCurrent((k) => ({ ...k, gap }))
 
@@ -128,7 +139,7 @@ export function deleteKonti(id: string) {
 
 // ---- sharing: the whole set travels in the link, no server needed ----
 
-type Wire = { t: string; g?: 1; i: (string | [string, number[]])[] }
+type Wire = { t: string; g?: 1; i: (string | [string, number[]] | [string, number[], number])[] }
 
 function b64url(bytes: Uint8Array) {
   let s = ''
@@ -144,7 +155,12 @@ function fromB64url(s: string) {
 export function shareLink(k: Konti) {
   const wire: Wire = {
     t: k.title,
-    i: k.items.map((i) => (i.skip.length ? [i.id, i.skip] : i.id)),
+    i: k.items.map((i) => {
+      // the repeat count only travels when it differs from the song's own default
+      const def = getSong(i.id)?.repeat ?? 1
+      const rep = i.rep ?? def
+      return rep !== def ? [i.id, i.skip, rep] : i.skip.length ? [i.id, i.skip] : i.id
+    }),
   }
   if (k.gap) wire.g = 1
   const code = b64url(new TextEncoder().encode(JSON.stringify(wire)))
@@ -156,12 +172,15 @@ export function importShared(code: string): boolean {
   try {
     const wire = JSON.parse(new TextDecoder().decode(fromB64url(code))) as Wire
     const items: Item[] = wire.i
-      .map((x) => (typeof x === 'string' ? { id: x, skip: [] as number[] } : { id: x[0], skip: x[1] }))
+      .map((x) =>
+        typeof x === 'string' ? { id: x, skip: [] as number[], rep: getSong(x)?.repeat ?? 1 } : { id: x[0], skip: x[1], rep: x[2] ?? getSong(x[0])?.repeat ?? 1 },
+      )
       .filter((x) => getSong(x.id))
       .map((x) => ({ key: uid(), ...x }))
     // opening the same link twice should not pile up copies
     const same = state.sets.find(
-      (k) => k.title === wire.t && JSON.stringify(k.items.map((i) => [i.id, i.skip])) === JSON.stringify(items.map((i) => [i.id, i.skip])),
+      (k) => k.title === wire.t && JSON.stringify(k.items.map((i) => [i.id, i.skip, i.rep ?? 1])) ===
+          JSON.stringify(items.map((i) => [i.id, i.skip, i.rep])),
     )
     if (same) {
       commit({ ...state, currentId: same.id })
