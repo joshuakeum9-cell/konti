@@ -1,6 +1,22 @@
 # 콘티 (Konti)
 
+## ▶ Open the app: **https://joshuakeum9-cell.github.io/konti/**
+
 Build a worship set list (콘티) from the church's song slides and present it full screen.
+Works on any laptop, tablet or phone browser. Nothing to install.
+
+**바로 열기: https://joshuakeum9-cell.github.io/konti/**
+
+### Quick start
+
+1. Open the link above (in Chrome or Edge on the church laptop).
+2. Search for a song and press **+** (or Enter) to add it to the 콘티.
+3. Drag to reorder; tap 1절, 2절... to skip verses.
+4. Press **발표 시작 / Present**. Arrow keys or a clicker move through the slides. Esc stops.
+
+Tip: press the globe button (top right) to switch the buttons between 한국어 and English.
+
+## Features
 
 - **곡 목록 / Songs**: search by number, title, English title or 초성 (ㅅㅁㅈㄲ). Enter adds the top result.
 - **콘티 / Set list**: drag to reorder, tap verse chips (1절, 2절...) to skip verses, open a song to pick single slides,
