@@ -95,6 +95,7 @@ export function Library({ onAdded }: { onAdded?: () => void }) {
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                       <path d="m5 12.5 4.5 4.5L19 7.5" />
                     </svg>
+                    <span class="lbl">{t.added(c)}</span>
                     {c > 1 && <span class="badge">{c}</span>}
                   </span>
                   <button class="remove" onClick={() => removeSong(s.id)}>
@@ -106,6 +107,7 @@ export function Library({ onAdded }: { onAdded?: () => void }) {
                   <svg viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M12 5v14M5 12h14" />
                   </svg>
+                  <span class="lbl">{t.add}</span>
                 </button>
               )}
             </li>

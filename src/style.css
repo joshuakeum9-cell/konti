@@ -869,9 +869,80 @@ svg {
   margin: 0;
 }
 
-@media (min-width: 1600px) {
+.lbl {
+  display: none;
+}
+
+/* wider windows: upright tiles, as many per row as fit (about 4 on a 1920 screen) */
+@media (min-width: 861px) {
   .songs {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 16px;
+  }
+  .song {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .song-main {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 10px 10px 12px;
+  }
+  .song .thumb {
+    width: 100%;
+  }
+  .song-sub {
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+  }
+  .song-main .song-text {
+    flex: 1;
+  }
+  .add,
+  .add-col {
+    width: auto;
+    align-self: auto;
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+  .add {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px;
+    font-weight: 700;
+  }
+  .add svg,
+  .added svg {
+    width: 20px;
+    height: 20px;
+  }
+  .add-col {
+    flex-direction: row;
+  }
+  .added {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    padding: 10px;
+    font-weight: 700;
+  }
+  .added .badge {
+    display: none;
+  }
+  .remove {
+    flex: 1;
+    border-top: 0;
+    border-left: 1px solid var(--line);
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .lbl {
+    display: inline;
   }
 }
 
